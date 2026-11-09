@@ -28,7 +28,10 @@ Elderly residents who can't use the link pay cash to the manager and get a stamp
 ## 4. Access and accounts
 
 - A **simple web link** that works in a phone or computer browser. It is **not** an app to install.
-- Languages: **Albanian** by default, **English** as an option.
+- Languages: **Albanian** (default), **Macedonian** and **English**.
+  - The manager picks the language when inviting a resident, so the invitation SMS arrives in that language.
+  - The resident can change their language at any time. The screens, SMS and PDF receipts all follow it.
+  - Every screen and message exists in all three languages. Nothing is shown in only one language.
 - **Login: phone number plus a one-time SMS code.** There are no passwords to forget, so there is nothing to reset.
 - **Account fields:** first name, last name, phone number, apartment, building. Email is optional.
 
@@ -204,6 +207,7 @@ For a cost larger than a service's fund, such as a new elevator motor:
 ### 7.4 Residents who don't use the link
 
 - Every month the manager prints a one-page summary from the app (balance, expenses and collection rate) and puts it on the entrance notice board.
+- The manager chooses which languages the summary is printed in (one or more of the three). By default it is printed in Albanian and Macedonian.
 
 ## 8. Questions and disputes
 
@@ -230,24 +234,28 @@ The original problem was disputes between neighbours, so every one gets a record
 
 ### 9.1 SMS texts
 
-Names, apartments, amounts and dates below are examples. `{link}` is the building's link.
+Each SMS is sent in the resident's chosen language (section 4). Names, apartments, amounts and dates below are examples. `{link}` is the building's short link (up to 25 characters).
 
-| When | SMS text |
-|---|---|
-| Login code | `Your login code: 482913. Valid for 5 minutes. Do not share it with anyone.` |
-| Invitation | `Hello Arben, you are invited to Entrance 3, Apt 5 to view and pay building expenses. Log in here: {link}` |
-| Cash payment recorded | `Received 30.00 EUR for Mar-May 2027, Apt 5. Receipt no. 0142.` |
-| Payment reversed | `Payment with receipt no. 0142 was reversed. Reason: wrong amount. Details in the app.` |
-| Reminder (1st of month) | `Reminder: the April 2027 payment (10.00 EUR) is due by 15 April. Pay here: {link}` |
-| Overdue (day after due date) | `The April 2027 payment has not been made yet. Pay here: {link}` |
-| Special charge | `Notice: a special charge for the elevator repair starts on 1 June. Details in the app.` |
-| Price change | `Notice: the elevator fee changes from 1 June. Details in the app.` |
-| Question answered | `The manager answered your question. See the app.` |
+| When | English | Albanian | Macedonian |
+|---|---|---|---|
+| Login code | `Your login code: 482913. Valid for 5 minutes. Do not share it with anyone.` | `Kodi juaj per hyrje: 482913. Vlen 5 minuta. Mos ia jepni askujt.` | `Вашиот код за најава: 482913. Важи 5 минути. Не го споделувајте.` |
+| Invitation | `Hello Arben, you are invited to Entrance 3, Apt 5 to view and pay building expenses. Log in here: {link}` | `Pershendetje Arben, jeni ftuar ne Hyrja 3, Banesa 5 per te pare dhe paguar shpenzimet e nderteses. Hyni ketu: {link}` | `Здраво Арбен, поканети сте во Влез 3, Стан 5. Најавете се тука: {link}` |
+| Cash payment recorded | `Received 30.00 EUR for Mar-May 2027, Apt 5. Receipt no. 0142.` | `U pranuan 30.00 EUR per Mars-Maj 2027, Banesa 5. Kuponi nr. 0142.` | `Примени 30.00 EUR за март-мај 2027, Стан 5. Признаница бр. 0142.` |
+| Payment reversed | `Payment with receipt no. 0142 was reversed. Reason: wrong amount. Details in the app.` | `Pagesa me kuponin nr. 0142 u anulua. Arsyeja: shume e gabuar. Detajet ne aplikacion.` | `Уплатата со признаница бр. 0142 е поништена. Причина: погрешен износ. Детали во апликацијата.` |
+| Reminder (1st of month) | `Reminder: the April 2027 payment (10.00 EUR) is due by 15 April. Pay here: {link}` | `Kujtese: pagesa per Prill 2027 (10.00 EUR) duhet deri me 15 Prill. Paguani ketu: {link}` | `Потсетник: уплатата за април 2027 (10.00 EUR) треба до 15 април. Платете тука: {link}` |
+| Overdue (day after due date) | `The April 2027 payment has not been made yet. Pay here: {link}` | `Pagesa per Prill 2027 nuk eshte bere ende. Paguani ketu: {link}` | `Уплатата за април 2027 сè уште не е направена. Платете тука: {link}` |
+| Special charge | `Notice: a special charge for the elevator repair starts on 1 June. Details in the app.` | `Njoftim: pagesa e vecante per riparimin e ashensorit fillon me 1 Qershor. Detajet ne aplikacion.` | `Известување: посебна уплата за поправка на лифтот од 1 јуни. Детали во апликацијата.` |
+| Price change | `Notice: the elevator fee changes from 1 June. Details in the app.` | `Njoftim: tarifa e ashensorit ndryshon nga 1 Qershor. Detajet ne aplikacion.` | `Известување: цената за лифтот се менува од 1 јуни. Детали во апликацијата.` |
+| Question answered | `The manager answered your question. See the app.` | `Menaxheri iu pergjigj pyetjes suaj. Shikoni ne aplikacion.` | `Управителот одговори на вашето прашање. Видете во апликацијата.` |
 
 **SMS rules**
-- Each SMS fits in **one SMS (160 characters)**.
+- **Length:**
+  - English and Albanian: each SMS fits in **one SMS (160 characters)**. Albanian texts leave out **ë** and **ç** (written as e and c), because those letters would cut an SMS to 70 characters.
+  - Macedonian is sent in **Cyrillic** so it's easy to read. Cyrillic SMS hold only 70 characters each, so a Macedonian message can use **up to 2 SMS (134 characters)**. This roughly doubles the SMS cost for Macedonian, which is paid from the administration fund (section 13).
+  - Every text, in every language, is checked against these limits with the longest expected link, name and amount.
 - No SMS contains a link that logs the resident in straight away. Logging in always needs the code, so a forwarded SMS gives nobody access.
 - No SMS contains another resident's details.
+- A professional translator reviews the Albanian and Macedonian texts before launch.
 
 ## 10. Audit log
 
@@ -332,7 +340,7 @@ The customer chose items 1–2. Items 3–35 were decided by Claude when the cus
 | 7 | Several people per apartment | One payer plus up to 3 members | 3, 4.1 |
 | 8 | Moving out | History and debt stay with the apartment | 4.2 |
 | 9 | Manager creation and handover | Platform admin creates managers. Co-manager and handover allowed | 3, 4.3 |
-| 10 | Language | Albanian by default, English optional | 4 |
+| 10 | Language | Albanian (default), Macedonian and English, chosen by each resident (decided by the customer) | 4, 9.1 |
 | 11 | Price changes | Future months only, 1 month notice, history visible | 5.3 |
 | 12 | Discount for paying in advance | None in version 1 | 5.2 |
 | 13 | Empty or commercial units | Empty units pay. Commercial units have their own prices. Exemptions logged | 5.2 |
