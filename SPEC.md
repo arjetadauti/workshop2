@@ -55,7 +55,7 @@ Elderly residents who can't use the link pay cash to the manager and get a stamp
 
 ### 4.4 Login
 
-**Screen 1: phone number**
+**Screen 1: phone number** (the example shows a building in Kosovo; the phone code starts on the building's country, see 4.5)
 ```
 ┌─────────────────────────────┐
 │  Log in                     │
@@ -88,6 +88,22 @@ Elderly residents who can't use the link pay cash to the manager and get a stamp
 - Only **invited numbers** get a code. For any number, the screen shows the same neutral message: "If this number is registered, we sent you a code." This way nobody can find out which numbers belong to residents.
 - After logging in, the resident **stays logged in for 90 days** on that device. They can log out at any time.
 
+### 4.5 Country of the building
+
+When the manager creates a building, they choose its **country**. The country sets these defaults for that building:
+
+| Country | Phone code | Currency | Amount format | Default language |
+|---|---|---|---|---|
+| Kosovo | +383 | EUR | 30.00 EUR (2 decimals) | Albanian |
+| North Macedonia | +389 | MKD | 1 850 MKD (whole denars) | Albanian; the manager can switch it to Macedonian |
+| Albania | +355 | ALL | 3 000 ALL (whole lek) | Albanian |
+
+- One manager can run buildings in **different countries**. Each building keeps its own country, currency and bank account. Amounts in different currencies are never added together.
+- The **phone code** on the login screen starts on the building's country. A resident can choose any other country code, for example someone living abroad who pays for a family member.
+- The **currency** of a building can't be changed after the first payment, so that past amounts stay correct.
+- The **data protection law** that applies is the law of the building's country (section 11).
+- More countries can be added later by adding a new row to this table.
+
 ## 5. Services, pricing and funds
 
 ### 5.1 Services and funds
@@ -104,7 +120,7 @@ Elderly residents who can't use the link pay cash to the manager and get a stamp
 - Commercial units can have their own price for each service.
 - Empty apartments still pay, because the building's costs don't stop.
 - The manager can make a unit **exempt** from a service, but must give a reason. Every exemption appears in the audit log.
-- **Currency:** set per building. The default is EUR.
+- **Currency:** comes from the building's country (section 4.5).
 - There is **no discount** for paying in advance (version 1).
 
 ### 5.3 Changing prices
@@ -234,7 +250,7 @@ The original problem was disputes between neighbours, so every one gets a record
 
 ### 9.1 SMS texts
 
-Each SMS is sent in the resident's chosen language (section 4). Names, apartments, amounts and dates below are examples. `{link}` is the building's short link (up to 25 characters).
+Each SMS is sent in the resident's chosen language (section 4). Names, apartments, amounts and dates below are examples. Amounts are always shown in the building's currency and format (section 4.5). For example, `30.00 EUR` becomes `1 850 MKD` for a building in North Macedonia. `{link}` is the building's short link (up to 25 characters).
 
 | When | English | Albanian | Macedonian |
 |---|---|---|---|
@@ -270,8 +286,8 @@ Each SMS is sent in the resident's chosen language (section 4). Names, apartment
 - The representative sees totals and the audit log, but not other residents' payments.
 - A manager sees only the buildings they manage.
 - Only the data that's needed is collected: name, phone, apartment, and optionally email. **Card details are never stored by the app.** The payment provider handles them.
-- The app follows the local personal-data protection law (GDPR-aligned).
-- Payment and expense records are kept for **5 years**, or longer if accounting law requires it.
+- The app follows the personal-data protection law of each building's country (Kosovo, North Macedonia, Albania; all GDPR-aligned).
+- Payment and expense records are kept for **5 years**, or longer if that country's accounting law requires it.
 - When a resident leaves, they can ask for their personal data to be deleted. Their payment records are then anonymised ("Apartment 5, former resident") and not removed.
 
 ## 12. Reports
@@ -297,7 +313,7 @@ Each SMS is sent in the resident's chosen language (section 4). Names, apartment
 **Manager**
 - Log in
 - Building list (several buildings)
-- Building setup: apartments, floors, unit types, services, prices per floor, due day, currency, bank account
+- Building setup: country, apartments, floors, unit types, services, prices per floor, due day, bank account
 - Residents: invite, set the payer, remove (move out)
 - Record a cash payment (with receipt number)
 - Record an expense (with invoice)
@@ -345,7 +361,7 @@ The customer chose items 1–2. Items 3–35 were decided by Claude when the cus
 | 12 | Discount for paying in advance | None in version 1 | 5.2 |
 | 13 | Empty or commercial units | Empty units pay. Commercial units have their own prices. Exemptions logged | 5.2 |
 | 14 | Big one-off costs | Special charge, approved by the representative | 5.4 |
-| 15 | Currency | Per building, EUR by default | 5.2 |
+| 15 | Currency and phone code | Set by the building's country: Kosovo, North Macedonia or Albania (decided by the customer) | 4.5 |
 | 16 | Past months / order | Oldest first. Can't pay ahead while in debt | 6.4 |
 | 17 | Due date, late fees | Due on the 15th. No late fees, only reminders | 6.1, 9 |
 | 18 | "A whole year" | The next 12 months from the first unpaid month | 6.4 |
