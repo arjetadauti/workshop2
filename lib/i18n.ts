@@ -21,6 +21,11 @@ const sq = {
   myPayments: "Pagesat e mia", paymentSaved: "Pagesa u regjistrua. Banori mori SMS.",
   errReceipt: "Ky numër kuponi është përdorur tashmë në këtë ndërtesë.", errPrice: "Mungon çmimi për një shërbim në këtë kat.",
   monthsOne: "1 muaj", monthsThree: "3 muaj", monthsYear: "12 muaj", setup: "Konfigurimi",
+  balance: "Bilanci total", income: "Të hyrat", expenses: "Shpenzimet", collected: "apartamente kanë paguar këtë muaj",
+  recordExpense: "Regjistro shpenzim", description: "Për çfarë", date: "Data e pagesës", invoice: "Fatura (foto ose PDF)",
+  openInvoice: "Fatura", expenseSaved: "Shpenzimi u regjistrua.", noAccess: "Nuk keni qasje në këtë ndërtesë.",
+  errNoInvoice: "Fatura është e detyrueshme.", errBadInvoice: "Fatura duhet të jetë PDF, JPG, PNG ose WEBP, deri në 10 MB.",
+  of: "nga",
 };
 export type Texts = typeof sq;
 
@@ -46,6 +51,11 @@ const en: Texts = {
   myPayments: "My payments", paymentSaved: "Payment recorded. The resident got an SMS.",
   errReceipt: "This receipt number is already used in this building.", errPrice: "A service has no price for this floor.",
   monthsOne: "1 month", monthsThree: "3 months", monthsYear: "12 months", setup: "Setup",
+  balance: "Total balance", income: "Income", expenses: "Expenses", collected: "apartments have paid this month",
+  recordExpense: "Record expense", description: "What for", date: "Date paid", invoice: "Invoice (photo or PDF)",
+  openInvoice: "Invoice", expenseSaved: "Expense recorded.", noAccess: "You do not have access to this building.",
+  errNoInvoice: "The invoice is required.", errBadInvoice: "The invoice must be a PDF, JPG, PNG or WEBP, up to 10 MB.",
+  of: "of",
 };
 
 export function t(lang: string | undefined): Texts {

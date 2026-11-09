@@ -1,5 +1,8 @@
 // Demo data: one manager (the platform-admin step) and one building in Kosovo.
 import pg from "pg";
+import { existsSync } from "node:fs";
+
+if (!process.env.DATABASE_URL && existsSync(".env")) process.loadEnvFile(".env");
 
 const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
 await client.connect();

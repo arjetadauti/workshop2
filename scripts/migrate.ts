@@ -2,6 +2,9 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import pg from "pg";
+import { existsSync } from "node:fs";
+
+if (!process.env.DATABASE_URL && existsSync(".env")) process.loadEnvFile(".env");
 
 export async function migrate(connectionString = process.env.DATABASE_URL) {
   const client = new pg.Client({ connectionString });
