@@ -95,3 +95,28 @@ export async function inviteResident(f: FormData) {
   await sendSms(phone!, smsText.invite(lang, first, `${b.name}, ${lang === "mk" ? "Стан" : lang === "en" ? "Apt" : "Banesa"} ${apt.number}`, link));
   back(b.id, "ok=invited");
 }
+
+export async function recordCash(f: FormData) {
+  const m = await requireManager();
+  const b = await managedBuilding(m.id, s(f, "building_id"));
+  const { recordCashPayment, PaymentError } = await import("@/lib/payments");
+  const { formatMoney } = await import("@/lib/money");
+  const { monthsLabel } = await import("@/lib/months");
+  const to = (q: string) => redirect(`/manager/buildings/${b.id}/payments?${q}`);
+  let result;
+  try {
+    result = await recordCashPayment({
+      managerId: m.id, apartmentId: s(f, "apartment_id"), monthCount: Number(s(f, "months")), receiptNo: s(f, "receipt_no"),
+    });
+  } catch (e) {
+    if (e instanceof PaymentError) to(`err=${e.code}`);
+    throw e;
+  }
+  // SMS confirmation to the apartment's active residents (SPEC 6.3 step 4), after the transaction committed.
+  const people = await query<{ phone: string; language: Lang }>(
+    "SELECT phone, language FROM residents WHERE apartment_id = $1 AND removed_at IS NULL", [s(f, "apartment_id")]);
+  for (const r of people)
+    await sendSms(r.phone, smsText.cashRecorded(r.language, formatMoney(result!.amountCents, result!.currency),
+      monthsLabel(result!.months, r.language), result!.apartmentNumber, s(f, "receipt_no")));
+  to("ok=paid");
+}

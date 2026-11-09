@@ -43,7 +43,8 @@ export default async function BuildingSetup({ params, searchParams }: {
   const hidden = <input type="hidden" name="building_id" value={b.id} />;
   return (
     <>
-      <Nav user={m} links={[{ href: "/manager", label: tx.buildings }, { href: `/manager/buildings/${b.id}`, label: b.name }]} />
+      <Nav user={m} links={[{ href: "/manager", label: tx.buildings }, { href: `/manager/buildings/${b.id}`, label: tx.setup },
+        { href: `/manager/buildings/${b.id}/payments`, label: tx.payments }, { href: `/building/${b.id}`, label: tx.building }]} />
       <h1>{b.name}</h1>
       <p className="muted">{b.currency} · {tx.startMonth}: {monthLabel(b.start_month, m.lang)}</p>
       <Flash q={q} tx={tx} />

@@ -16,6 +16,11 @@ const sq = {
   errDuplicate: "Ekziston tashmë.", errInvalid: "Të dhëna të pavlefshme.", errPhoneTaken: "Ky numër përdoret nga një banor tjetër.",
   myApartment: "Banesa ime", building: "Ndërtesa", welcome: "Mirë se vini",
   floorShort: "Kati",
+  payments: "Pagesat", recordCash: "Regjistro pagesë me para në dorë", months: "Muaj", receiptNo: "Nr. i kuponit",
+  record: "Regjistro", month: "Muaji", status: "Statusi", paid: "Paguar", unpaid: "Pa paguar", overdue: "Me vonesë",
+  myPayments: "Pagesat e mia", paymentSaved: "Pagesa u regjistrua. Banori mori SMS.",
+  errReceipt: "Ky numër kuponi është përdorur tashmë në këtë ndërtesë.", errPrice: "Mungon çmimi për një shërbim në këtë kat.",
+  monthsOne: "1 muaj", monthsThree: "3 muaj", monthsYear: "12 muaj", setup: "Konfigurimi",
 };
 export type Texts = typeof sq;
 
@@ -36,6 +41,11 @@ const en: Texts = {
   errDuplicate: "This already exists.", errInvalid: "Invalid data.", errPhoneTaken: "This number is used by another resident.",
   myApartment: "My apartment", building: "Building", welcome: "Welcome",
   floorShort: "Floor",
+  payments: "Payments", recordCash: "Record cash payment", months: "Months", receiptNo: "Receipt no.",
+  record: "Record", month: "Month", status: "Status", paid: "Paid", unpaid: "Unpaid", overdue: "Overdue",
+  myPayments: "My payments", paymentSaved: "Payment recorded. The resident got an SMS.",
+  errReceipt: "This receipt number is already used in this building.", errPrice: "A service has no price for this floor.",
+  monthsOne: "1 month", monthsThree: "3 months", monthsYear: "12 months", setup: "Setup",
 };
 
 export function t(lang: string | undefined): Texts {
