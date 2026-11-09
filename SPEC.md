@@ -50,6 +50,41 @@ Elderly residents who can't use the link pay cash to the manager and get a stamp
 - A building can be moved to a new manager. The full history and audit log move with it.
 - The old manager loses access on the handover date.
 
+### 4.4 Login
+
+**Screen 1: phone number**
+```
+┌─────────────────────────────┐
+│  Log in                     │
+│                             │
+│  Phone number               │
+│  [ +383 ▾ ][ 44 123 456  ]  │
+│                             │
+│  [   Send code   ]          │
+└─────────────────────────────┘
+```
+
+**Screen 2: code**
+```
+┌─────────────────────────────┐
+│  Enter the 6-digit code     │
+│  we sent to                 │
+│  +383 44 *** 456            │
+│                             │
+│  [ _ _ _ _ _ _ ]            │
+│                             │
+│  [      Log in      ]       │
+│  Resend code (0:59)         │
+└─────────────────────────────┘
+```
+
+**Rules**
+- The code has **6 digits**, is valid for **5 minutes** and can be used **once**.
+- After **5 wrong attempts**, the code stops working and a new code is needed.
+- **Resend** is possible after 60 seconds, up to **3 SMS per 15 minutes** for each number.
+- Only **invited numbers** get a code. For any number, the screen shows the same neutral message: "If this number is registered, we sent you a code." This way nobody can find out which numbers belong to residents.
+- After logging in, the resident **stays logged in for 90 days** on that device. They can log out at any time.
+
 ## 5. Services, pricing and funds
 
 ### 5.1 Services and funds
@@ -192,6 +227,27 @@ The original problem was disputes between neighbours, so every one gets a record
 | New expense / special charge / price change | All residents of the building | In app, and SMS for special charges and price changes |
 | Question answered | Resident who asked | In app and SMS |
 | New question / receipt-number gap | Manager (and representative for gaps) | In app |
+
+### 9.1 SMS texts
+
+Names, apartments, amounts and dates below are examples. `{link}` is the building's link.
+
+| When | SMS text |
+|---|---|
+| Login code | `Your login code: 482913. Valid for 5 minutes. Do not share it with anyone.` |
+| Invitation | `Hello Arben, you are invited to Entrance 3, Apt 5 to view and pay building expenses. Log in here: {link}` |
+| Cash payment recorded | `Received 30.00 EUR for Mar-May 2027, Apt 5. Receipt no. 0142.` |
+| Payment reversed | `Payment with receipt no. 0142 was reversed. Reason: wrong amount. Details in the app.` |
+| Reminder (1st of month) | `Reminder: the April 2027 payment (10.00 EUR) is due by 15 April. Pay here: {link}` |
+| Overdue (day after due date) | `The April 2027 payment has not been made yet. Pay here: {link}` |
+| Special charge | `Notice: a special charge for the elevator repair starts on 1 June. Details in the app.` |
+| Price change | `Notice: the elevator fee changes from 1 June. Details in the app.` |
+| Question answered | `The manager answered your question. See the app.` |
+
+**SMS rules**
+- Each SMS fits in **one SMS (160 characters)**.
+- No SMS contains a link that logs the resident in straight away. Logging in always needs the code, so a forwarded SMS gives nobody access.
+- No SMS contains another resident's details.
 
 ## 10. Audit log
 
