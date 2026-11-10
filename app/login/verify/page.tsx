@@ -4,7 +4,7 @@ import { requestCodeAction, verifyCodeAction } from "../actions";
 
 export default async function VerifyPage({ searchParams }: { searchParams: Promise<{ phone?: string; err?: string }> }) {
   const { phone = "", err } = await searchParams;
-  const tx = t("sq");
+  const tx = t("en");
   return (
     <div className="center"><div className="login">
       <h1>🏢 {tx.appName}</h1>

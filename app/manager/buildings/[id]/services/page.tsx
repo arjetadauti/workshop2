@@ -42,7 +42,7 @@ export default async function Services({ params, searchParams }: { params: Promi
         <h2>+ {tx.addService}</h2>
         <input type="hidden" name="building_id" value={b.id} />
         <div className="row" style={{ alignItems: "end" }}>
-          <div><label>{tx.service}</label><input name="name" required placeholder="Pastrimi, Ashensori, Drita…" /></div>
+          <div><label>{tx.service}</label><input name="name" required placeholder="Cleaning, Elevator, Lighting…" /></div>
           <div style={{ flex: "0 0 auto" }}><button type="submit">{tx.addService}</button></div>
         </div>
       </form>

@@ -4,7 +4,7 @@ import { requestCodeAction } from "./actions";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ err?: string }> }) {
   const { err } = await searchParams;
-  const tx = t("sq");
+  const tx = t("en");
   return (
     <div className="center"><div className="login">
       <h1>🏢 {tx.appName}</h1>

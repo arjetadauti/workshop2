@@ -54,7 +54,7 @@ export function Shell({ user, menu, active, title, subtitle, buildings, children
         </nav>
         <div className="who">
           <div><strong>{user.firstName} {user.lastName}</strong></div>
-          <div className="muted small">{user.kind === "manager" ? "Menaxher" : `${tx.apartment} ${user.apartmentNumber}`}</div>
+          <div className="muted small">{user.kind === "manager" ? tx.manager : `${tx.apartment} ${user.apartmentNumber}`}</div>
           <form action={logoutAction}><button type="submit" className="ghost">↩ {tx.logout}</button></form>
         </div>
       </aside>

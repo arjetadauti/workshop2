@@ -32,7 +32,7 @@ export default async function ManagerHome({ searchParams }: { searchParams: Prom
       </div>
       <form action={createBuilding} className="card">
         <h2>+ {tx.newBuilding}</h2>
-        <label>{tx.name}</label><input name="name" required placeholder="Hyrja 3, Rruga …" />
+        <label>{tx.name}</label><input name="name" required placeholder="Entrance 3, Main Street" />
         <div className="row">
           <div><label>{tx.country}</label>
             <select name="country">{Object.entries(COUNTRIES).map(([k, c]) => <option key={k} value={k}>{c.name} ({c.currency})</option>)}</select></div>

@@ -31,5 +31,5 @@ In development, SMS are not sent. They are printed to the terminal running `npm 
 - **Residents only see their own apartment.** Every resident query is filtered by the `apartment_id` from the session, never by an id from the URL or form.
 - **Building data** (balance, expenses, invoices) is only shown to users of that building.
 - Business rules that protect money (unique month per apartment, unique receipt number) live in the database as constraints, not only in code.
-- UI texts live in `lib/i18n.ts`. Albanian is the default.
+- UI texts live in `lib/i18n.ts`. English is the default; Albanian is available.
 - One commit per feature. `npm run build` and `npm test` pass before each commit.

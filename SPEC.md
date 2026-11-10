@@ -28,7 +28,7 @@ Elderly residents who can't use the link pay cash to the manager and get a stamp
 ## 4. Access and accounts
 
 - A **simple web link** that works in a phone or computer browser. It is **not** an app to install.
-- Languages: **Albanian** (default), **Macedonian** and **English**.
+- Languages: **English** (default), **Albanian** and **Macedonian**.
   - The manager picks the language when inviting a resident, so the invitation SMS arrives in that language.
   - The resident can change their language at any time. The screens, SMS and PDF receipts all follow it.
   - Every screen and message exists in all three languages. Nothing is shown in only one language.
@@ -223,7 +223,7 @@ For a cost larger than a service's fund, such as a new elevator motor:
 ### 7.4 Residents who don't use the link
 
 - Every month the manager prints a one-page summary from the app (balance, expenses and collection rate) and puts it on the entrance notice board.
-- The manager chooses which languages the summary is printed in (one or more of the three). By default it is printed in Albanian and Macedonian.
+- The manager chooses which languages the summary is printed in (one or more of the three). By default it is printed in English.
 
 ## 8. Questions and disputes
 
@@ -356,7 +356,7 @@ The customer chose items 1–2. Items 3–35 were decided by Claude when the cus
 | 7 | Several people per apartment | One payer plus up to 3 members | 3, 4.1 |
 | 8 | Moving out | History and debt stay with the apartment | 4.2 |
 | 9 | Manager creation and handover | Platform admin creates managers. Co-manager and handover allowed | 3, 4.3 |
-| 10 | Language | Albanian (default), Macedonian and English, chosen by each resident (decided by the customer) | 4, 9.1 |
+| 10 | Language | English (default), Albanian and Macedonian, chosen by each resident (decided by the customer; English default changed after Round 3) | 4, 9.1 |
 | 11 | Price changes | Future months only, 1 month notice, history visible | 5.3 |
 | 12 | Discount for paying in advance | None in version 1 | 5.2 |
 | 13 | Empty or commercial units | Empty units pay. Commercial units have their own prices. Exemptions logged | 5.2 |

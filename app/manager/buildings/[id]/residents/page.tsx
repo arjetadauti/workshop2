@@ -32,7 +32,7 @@ export default async function Residents({ params, searchParams }: { params: Prom
           <div className="row">
             <div><label>{tx.phone}</label><input name="phone" type="tel" required placeholder="44 123 456" /></div>
             <div><label>{tx.apartment}</label><select name="apartment_id">{apartments.map((a) => <option key={a.id} value={a.id}>{a.number} ({tx.floorShort} {a.floor})</option>)}</select></div>
-            <div><label>{tx.language}</label><select name="language"><option value="sq">Shqip</option><option value="mk">Македонски</option><option value="en">English</option></select></div>
+            <div><label>{tx.language}</label><select name="language"><option value="en">English</option><option value="sq">Shqip</option><option value="mk">Македонски</option></select></div>
           </div>
           <div className="form-end"><button type="submit">📩 {tx.invite}</button></div>
         </form>

@@ -19,7 +19,7 @@ export default async function Expenses({ params, searchParams }: { params: Promi
         <form action={recordExpenseAction} className="card">
           <h2>🧾 {tx.recordExpense}</h2>
           <input type="hidden" name="building_id" value={b.id} />
-          <label>{tx.description}</label><input name="description" required placeholder="Riparimi i ashensorit" />
+          <label>{tx.description}</label><input name="description" required placeholder="Elevator repair" />
           <div className="row">
             <div><label>{tx.service}</label><select name="service_id">{services.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
             <div><label>{tx.amount} ({b.currency})</label><input name="amount" inputMode="decimal" required placeholder="50" /></div>

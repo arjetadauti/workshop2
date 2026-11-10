@@ -18,7 +18,7 @@ if (existing.rowCount === 0) {
   start.setUTCMonth(start.getUTCMonth() - 5, 1);
   await client.query(
     `INSERT INTO buildings (manager_id, name, country, currency, start_month)
-     VALUES ($1, 'Hyrja 3, Rruga e Demos', 'XK', 'EUR', $2)`,
+     VALUES ($1, 'Entrance 3, Demo Street', 'XK', 'EUR', $2)`,
     [m.rows[0].id, start.toISOString().slice(0, 10)],
   );
 }

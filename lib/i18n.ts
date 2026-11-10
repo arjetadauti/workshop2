@@ -1,4 +1,4 @@
-// UI texts. Albanian is the default (SPEC 4). Macedonian is a Should feature.
+// UI texts. English is the default; Albanian is available. Macedonian is a Should feature.
 const sq = {
   appName: "Shpenzimet e ndërtesës",
   login: "Hyr", phone: "Numri i telefonit", sendCode: "Dërgo kodin",
@@ -14,7 +14,7 @@ const sq = {
   residents: "Banorët", firstName: "Emri", lastName: "Mbiemri", language: "Gjuha", invite: "Fto banorin",
   apartment: "Banesa", noneYet: "Asgjë ende.", saved: "U ruajt.", invited: "Banori u ftua. SMS u dërgua.",
   errDuplicate: "Ekziston tashmë.", errInvalid: "Të dhëna të pavlefshme.", errPhoneTaken: "Ky numër përdoret nga një banor tjetër.",
-  myApartment: "Banesa ime", building: "Ndërtesa", welcome: "Mirë se vini",
+  manager: "Menaxher", myApartment: "Banesa ime", building: "Ndërtesa", welcome: "Mirë se vini",
   floorShort: "Kati",
   payments: "Pagesat", recordCash: "Regjistro pagesë me para në dorë", months: "Muaj", receiptNo: "Nr. i kuponit",
   record: "Regjistro", month: "Muaji", status: "Statusi", paid: "Paguar", unpaid: "Pa paguar", overdue: "Me vonesë",
@@ -40,7 +40,7 @@ const sq = {
 export type Texts = typeof sq;
 
 const en: Texts = {
-  appName: "Building expenses",
+  appName: "Building Expenses",
   login: "Log in", phone: "Phone number", sendCode: "Send code",
   codeSent: "If this number is registered, we sent you a code.",
   enterCode: "Enter the 6-digit code we sent to", code: "Code", resend: "Resend code",
@@ -54,7 +54,7 @@ const en: Texts = {
   residents: "Residents", firstName: "First name", lastName: "Last name", language: "Language", invite: "Invite resident",
   apartment: "Apartment", noneYet: "Nothing yet.", saved: "Saved.", invited: "Resident invited. SMS sent.",
   errDuplicate: "This already exists.", errInvalid: "Invalid data.", errPhoneTaken: "This number is used by another resident.",
-  myApartment: "My apartment", building: "Building", welcome: "Welcome",
+  manager: "Manager", myApartment: "My apartment", building: "Building", welcome: "Welcome",
   floorShort: "Floor",
   payments: "Payments", recordCash: "Record cash payment", months: "Months", receiptNo: "Receipt no.",
   record: "Record", month: "Month", status: "Status", paid: "Paid", unpaid: "Unpaid", overdue: "Overdue",
@@ -79,5 +79,5 @@ const en: Texts = {
 };
 
 export function t(lang: string | undefined): Texts {
-  return lang === "en" ? en : sq;
+  return lang === "sq" ? sq : en;
 }

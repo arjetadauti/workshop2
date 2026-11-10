@@ -23,13 +23,13 @@ const NAMES: Record<string, string[]> = {
   mk: ["јануари", "февруари", "март", "април", "мај", "јуни", "јули", "август", "септември", "октомври", "ноември", "декември"],
 };
 
-export function monthLabel(month: string, lang = "sq"): string {
+export function monthLabel(month: string, lang = "en"): string {
   const [y, m] = month.split("-").map(Number);
-  return `${(NAMES[lang] ?? NAMES.sq)[m - 1]} ${y}`;
+  return `${(NAMES[lang] ?? NAMES.en)[m - 1]} ${y}`;
 }
 
 /** "Mars-Maj 2027" style label for a run of months (used in SMS). */
-export function monthsLabel(months: string[], lang = "sq"): string {
+export function monthsLabel(months: string[], lang = "en"): string {
   if (months.length === 1) return monthLabel(months[0], lang);
   const a = monthLabel(months[0], lang), b = monthLabel(months[months.length - 1], lang);
   const [an, ay] = [a.slice(0, a.lastIndexOf(" ")), a.slice(a.lastIndexOf(" ") + 1)];

@@ -7,9 +7,9 @@ export function normalizePhone(raw: string, defaultCode = "+383"): string | null
 }
 
 export const COUNTRIES = {
-  XK: { name: "Kosovo", phone: "+383", currency: "EUR", lang: "sq" },
-  MK: { name: "North Macedonia", phone: "+389", currency: "MKD", lang: "sq" },
-  AL: { name: "Albania", phone: "+355", currency: "ALL", lang: "sq" },
+  XK: { name: "Kosovo", phone: "+383", currency: "EUR", lang: "en" },
+  MK: { name: "North Macedonia", phone: "+389", currency: "MKD", lang: "en" },
+  AL: { name: "Albania", phone: "+355", currency: "ALL", lang: "en" },
 } as const;
 export type Country = keyof typeof COUNTRIES;
 

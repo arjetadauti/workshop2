@@ -87,7 +87,7 @@ export async function inviteResident(f: FormData) {
   const m = await requireManager();
   const b = await managedBuilding(m.id, s(f, "building_id"));
   const phone = normalizePhone(s(f, "phone"), COUNTRIES[b.country as Country].phone);
-  const lang = (["sq", "mk", "en"].includes(s(f, "language")) ? s(f, "language") : "sq") as Lang;
+  const lang = (["sq", "mk", "en"].includes(s(f, "language")) ? s(f, "language") : "en") as Lang;
   const first = s(f, "first_name"), last = s(f, "last_name");
   if (!phone || !first || !last) back(b.id, "err=invalid", "residents");
   const [apt] = await query<{ id: string; number: string }>(
