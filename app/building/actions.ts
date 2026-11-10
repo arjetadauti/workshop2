@@ -17,8 +17,8 @@ export async function recordExpenseAction(f: FormData) {
       paidOn: String(f.get("paid_on") ?? ""), invoice,
     });
   } catch (e) {
-    if (e instanceof ExpenseError) redirect(`/building/${buildingId}?err=${e.code}`);
+    if (e instanceof ExpenseError) redirect(`/manager/buildings/${buildingId}/expenses?err=${e.code}`);
     throw e;
   }
-  redirect(`/building/${buildingId}?ok=expense`);
+  redirect(`/manager/buildings/${buildingId}/expenses?ok=expense`);
 }

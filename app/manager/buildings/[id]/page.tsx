@@ -1,119 +1,81 @@
-import { requireManager } from "@/lib/auth";
-import { managedBuilding } from "@/lib/buildings";
+import Link from "next/link";
 import { query } from "@/lib/db";
-import { t, type Texts } from "@/lib/i18n";
+import { buildingSummary } from "@/lib/expenses";
+import { managerContext } from "@/lib/manager-page";
 import { formatMoney } from "@/lib/money";
 import { monthLabel } from "@/lib/months";
-import { Nav } from "../../../nav";
-import { addApartment, addService, inviteResident, setPrice } from "../../actions";
+import { apartmentDebt } from "@/lib/payments";
+import { managerMenu, Shell } from "../../../shell";
 
-type Search = { ok?: string; err?: string };
-
-function Flash({ q, tx }: { q: Search; tx: Texts }) {
-  const ok = { saved: tx.saved, invited: tx.invited }[q.ok ?? ""];
-  const err = { invalid: tx.errInvalid, duplicate: tx.errDuplicate, phone: tx.errPhoneTaken }[q.err ?? ""];
-  return ok ? <p className="msg ok">{ok}</p> : err ? <p className="msg bad">{err}</p> : null;
-}
-
-export default async function BuildingSetup({ params, searchParams }: {
-  params: Promise<{ id: string }>; searchParams: Promise<Search>;
-}) {
-  const m = await requireManager();
-  const b = await managedBuilding(m.id, (await params).id);
-  const tx = t(m.lang);
-  const q = await searchParams;
-
+export default async function Dashboard({ params }: { params: Promise<{ id: string }> }) {
+  const { m, b, tx, buildings } = await managerContext((await params).id);
+  const base = `/manager/buildings/${b.id}`;
+  const sum = await buildingSummary(b.id);
   const apartments = await query<{ id: string; number: string; floor: number }>(
     "SELECT id, number, floor FROM apartments WHERE building_id = $1 ORDER BY floor, number", [b.id]);
-  const services = await query<{ id: string; name: string }>(
-    "SELECT id, name FROM services WHERE building_id = $1 ORDER BY name", [b.id]);
-  const prices = await query<{ service_id: string; floor: number; amount_cents: string; valid_from: string }>(
-    `SELECT p.service_id, p.floor, p.amount_cents, to_char(p.valid_from, 'YYYY-MM-DD') AS valid_from
-     FROM prices p JOIN services s ON s.id = p.service_id WHERE s.building_id = $1
-     ORDER BY p.valid_from`, [b.id]);
-  const residents = await query<{ first_name: string; last_name: string; phone: string; number: string; language: string }>(
-    `SELECT r.first_name, r.last_name, r.phone, a.number, r.language FROM residents r
-     JOIN apartments a ON a.id = r.apartment_id WHERE a.building_id = $1 AND r.removed_at IS NULL
-     ORDER BY a.floor, a.number`, [b.id]);
-  const floors = [...new Set(apartments.map((a) => a.floor))].sort((x, y) => x - y);
-  // latest price per service+floor (prices are ordered by valid_from)
-  const current = new Map<string, { amount: string; from: string }>();
-  for (const p of prices) current.set(`${p.service_id}:${p.floor}`, { amount: p.amount_cents, from: p.valid_from });
+  const [counts] = await query<{ services: number; prices: number; residents: number }>(
+    `SELECT (SELECT count(*)::int FROM services WHERE building_id = $1) AS services,
+            (SELECT count(*)::int FROM prices p JOIN services s ON s.id = p.service_id WHERE s.building_id = $1) AS prices,
+            (SELECT count(*)::int FROM residents r JOIN apartments a ON a.id = r.apartment_id WHERE a.building_id = $1 AND r.removed_at IS NULL) AS residents`, [b.id]);
+  const debts = await Promise.all(apartments.map(async (a) => ({ ...a, d: await apartmentDebt(a.id) })));
+  const owing = debts.filter((x) => x.d.unpaid.length > 0);
 
-  const hidden = <input type="hidden" name="building_id" value={b.id} />;
+  const steps = [
+    { done: apartments.length > 0, label: tx.apartmentsMenu, href: `${base}/apartments` },
+    { done: counts.services > 0 && counts.prices > 0, label: tx.servicesMenu, href: `${base}/services` },
+    { done: counts.residents > 0, label: tx.residentsMenu, href: `${base}/residents` },
+  ];
+  const setupDone = steps.every((s) => s.done);
+
   return (
-    <>
-      <Nav user={m} links={[{ href: "/manager", label: tx.buildings }, { href: `/manager/buildings/${b.id}`, label: tx.setup },
-        { href: `/manager/buildings/${b.id}/payments`, label: tx.payments }, { href: `/building/${b.id}`, label: tx.building }]} />
-      <h1>{b.name}</h1>
-      <p className="muted">{b.currency} · {tx.startMonth}: {monthLabel(b.start_month, m.lang)}</p>
-      <Flash q={q} tx={tx} />
+    <Shell user={m} menu={managerMenu(b.id, tx)} active={base} title={b.name} subtitle={`${tx.dashboard} · ${b.currency}`} buildings={buildings}>
+      {!setupDone && (
+        <div className="card">
+          <h2>⚙️ {tx.setupGuide}</h2>
+          <div className="steps">
+            {steps.map((s, i) => (
+              <Link key={s.href} href={s.href} className={s.done ? "done" : ""}>
+                {s.done ? "✅" : "⬜"} {tx.step} {i + 1}: {s.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
-      <h2>{tx.apartments}</h2>
-      <div className="card">
-        {apartments.length === 0 ? <p className="muted">{tx.noneYet}</p> : (
-          <table><thead><tr><th>{tx.number}</th><th>{tx.floor}</th></tr></thead>
-            <tbody>{apartments.map((a) => <tr key={a.id}><td>{a.number}</td><td>{a.floor}</td></tr>)}</tbody></table>
-        )}
-        <form action={addApartment} className="row">
-          {hidden}
-          <div><label>{tx.number}</label><input name="number" required /></div>
-          <div><label>{tx.floor}</label><input name="floor" type="number" min={0} defaultValue={0} required /></div>
-          <div style={{ alignSelf: "end" }}><button type="submit">{tx.addApartment}</button></div>
-        </form>
+      <div className="stats">
+        <div className="stat"><div className="label">💰 {tx.balance}</div>
+          <div className={`value ${sum.balanceCents < 0 ? "bad" : ""}`}>{formatMoney(sum.balanceCents, b.currency)}</div>
+          <div className="muted small">{tx.income} {formatMoney(sum.incomeCents, b.currency)} · {tx.expenses} {formatMoney(sum.expenseCents, b.currency)}</div></div>
+        <div className="stat"><div className="label">✅ {tx.paidThisMonth}</div>
+          <div className="value">{sum.paidThisMonth} / {sum.apartments}</div>
+          <div className="muted small">{sum.apartments ? Math.round((100 * sum.paidThisMonth) / sum.apartments) : 0}%</div></div>
+        <div className="stat"><div className="label">⚠️ {tx.owing}</div>
+          <div className={`value ${owing.length ? "bad" : "ok"}`}>{owing.length}</div></div>
       </div>
 
-      <h2>{tx.services} · {tx.prices}</h2>
-      <div className="card scroll">
-        {services.length > 0 && floors.length > 0 && (
+      <div className="card">
+        <h2>{tx.quick}</h2>
+        <div className="actions">
+          <Link className="btn" href={`${base}/payments`}>💶 {tx.recordCash}</Link>
+          <Link className="btn light" href={`${base}/expenses`}>🧾 {tx.recordExpense}</Link>
+          <Link className="btn light" href={`${base}/residents`}>👥 {tx.invite}</Link>
+        </div>
+      </div>
+
+      <div className="card">
+        <h2>⚠️ {tx.owing}</h2>
+        {owing.length === 0 ? <p className="empty">{apartments.length ? tx.allPaid : tx.emptyApartments}</p> : (
           <table>
-            <thead><tr><th>{tx.service}</th>{floors.map((f) => <th key={f} className="num">{tx.floorShort} {f}</th>)}</tr></thead>
-            <tbody>{services.map((s) => (
-              <tr key={s.id}><td>{s.name}</td>{floors.map((f) => {
-                const p = current.get(`${s.id}:${f}`);
-                return <td key={f} className="num">{p ? formatMoney(p.amount, b.currency) : <span className="bad">—</span>}</td>;
-              })}</tr>))}</tbody>
+            <thead><tr><th>{tx.apartment}</th><th>{tx.months}</th><th className="num">{tx.owes}</th></tr></thead>
+            <tbody>{owing.map((x) => (
+              <tr key={x.id}>
+                <td><strong>{x.number}</strong> <span className="muted small">· {tx.floorShort} {x.floor}</span></td>
+                <td>{x.d.unpaid.length} {tx.monthsUnpaid} <span className="muted small">({monthLabel(x.d.unpaid[0], m.lang)}…)</span></td>
+                <td className="num"><span className="badge bad">{x.d.amountCents >= 0 ? formatMoney(x.d.amountCents, b.currency) : "?"}</span></td>
+              </tr>))}</tbody>
           </table>
         )}
-        <form action={addService} className="row">
-          {hidden}
-          <div><label>{tx.service}</label><input name="name" required placeholder="Ashensori" /></div>
-          <div style={{ alignSelf: "end" }}><button type="submit">{tx.addService}</button></div>
-        </form>
-        {services.length > 0 && (
-          <form action={setPrice} className="row">
-            {hidden}
-            <div><label>{tx.service}</label><select name="service_id">{services.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
-            <div><label>{tx.floor}</label><input name="floor" type="number" min={0} defaultValue={0} required /></div>
-            <div><label>{tx.amount} ({b.currency})</label><input name="amount" inputMode="decimal" required placeholder="0" /></div>
-            <div><label>{tx.validFrom}</label><input name="valid_from" type="month" defaultValue={b.start_month.slice(0, 7)} /></div>
-            <div style={{ alignSelf: "end" }}><button type="submit">{tx.setPrice}</button></div>
-          </form>
-        )}
       </div>
-
-      <h2>{tx.residents}</h2>
-      <div className="card">
-        {residents.length === 0 ? <p className="muted">{tx.noneYet}</p> : (
-          <table><thead><tr><th>{tx.apartment}</th><th>{tx.name}</th><th>{tx.phone}</th></tr></thead>
-            <tbody>{residents.map((r) => <tr key={r.phone}><td>{r.number}</td><td>{r.first_name} {r.last_name}</td><td>{r.phone}</td></tr>)}</tbody></table>
-        )}
-        {apartments.length > 0 && (
-          <form action={inviteResident}>
-            {hidden}
-            <div className="row">
-              <div><label>{tx.firstName}</label><input name="first_name" required /></div>
-              <div><label>{tx.lastName}</label><input name="last_name" required /></div>
-            </div>
-            <div className="row">
-              <div><label>{tx.phone}</label><input name="phone" type="tel" required /></div>
-              <div><label>{tx.apartment}</label><select name="apartment_id">{apartments.map((a) => <option key={a.id} value={a.id}>{a.number} ({tx.floorShort} {a.floor})</option>)}</select></div>
-              <div><label>{tx.language}</label><select name="language"><option value="sq">Shqip</option><option value="mk">Македонски</option><option value="en">English</option></select></div>
-            </div>
-            <button type="submit">{tx.invite}</button>
-          </form>
-        )}
-      </div>
-    </>
+    </Shell>
   );
 }

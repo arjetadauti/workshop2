@@ -8,7 +8,8 @@ export class PaymentError extends Error {
 }
 
 /** What one apartment owes for one month: the latest price of every service for its floor. */
-async function monthlyDue(c: PoolClient, buildingId: string, floor: number, month: string): Promise<number> {
+type Q = { query: PoolClient["query"] };
+async function monthlyDue(c: Q, buildingId: string, floor: number, month: string): Promise<number> {
   const { rows } = await c.query<{ name: string; amount_cents: string | null }>(
     `SELECT s.name,
             (SELECT p.amount_cents FROM prices p
@@ -92,4 +93,19 @@ export async function apartmentMonths(apartmentId: string, today = new Date()): 
       overdue: !p && today > due });
   }
   return out;
+}
+
+/** Unpaid months up to the current month and what they cost (for status cards). */
+export async function apartmentDebt(apartmentId: string, today = new Date()) {
+  const months = await apartmentMonths(apartmentId, today);
+  const now = toMonth(today);
+  const unpaid = months.filter((m) => !m.paid && m.month <= now);
+  const [a] = await query<{ floor: number; building_id: string }>("SELECT floor, building_id FROM apartments WHERE id = $1", [apartmentId]);
+  let amountCents = 0;
+  const { pool } = await import("./db");
+  try {
+    for (const m of unpaid) amountCents += await monthlyDue(pool, a.building_id, a.floor, m.month);
+  } catch { amountCents = -1; } // a price is missing
+  const paidUpTo = months.filter((m) => m.paid).map((m) => m.month).sort().at(-1) ?? null;
+  return { unpaid: unpaid.map((m) => m.month), overdue: unpaid.filter((m) => m.overdue).length, amountCents, paidUpTo };
 }

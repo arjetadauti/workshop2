@@ -6,8 +6,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { err } = await searchParams;
   const tx = t("sq");
   return (
-    <>
-      <h1>{tx.appName}</h1>
+    <div className="center"><div className="login">
+      <h1>🏢 {tx.appName}</h1>
       <form action={requestCodeAction} className="card">
         <h2>{tx.login}</h2>
         {err === "phone" && <p className="bad">{tx.badPhone}</p>}
@@ -18,8 +18,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           </select>
           <input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" required placeholder="44 123 456" />
         </div>
-        <button type="submit">{tx.sendCode}</button>
+        <div className="form-end"><button type="submit" style={{ width: "100%", justifyContent: "center" }}>{tx.sendCode}</button></div>
       </form>
-    </>
+    </div></div>
   );
 }

@@ -1,40 +1,42 @@
 import Link from "next/link";
 import { requireResident } from "@/lib/auth";
 import { buildingById } from "@/lib/buildings";
+import { buildingSummary } from "@/lib/expenses";
 import { t } from "@/lib/i18n";
 import { formatMoney } from "@/lib/money";
 import { monthLabel } from "@/lib/months";
-import { apartmentMonths } from "@/lib/payments";
-import { Nav } from "../nav";
+import { apartmentDebt } from "@/lib/payments";
+import { residentMenu, Shell } from "../shell";
 
-// Shows ONLY the logged-in resident's apartment: the id comes from the session, never from the URL.
-export default async function MePage() {
+// The resident's home: one clear answer first. Data comes from the session's apartment only.
+export default async function ResidentHome() {
   const r = await requireResident();
   const tx = t(r.lang);
-  const b = await buildingById(r.buildingId);
-  const months = (await apartmentMonths(r.apartmentId)).reverse();
+  const b = (await buildingById(r.buildingId))!;
+  const d = await apartmentDebt(r.apartmentId);
+  const sum = await buildingSummary(r.buildingId);
+  const ok = d.unpaid.length === 0;
   return (
-    <>
-      <Nav user={r} links={[{ href: "/me", label: tx.myApartment }, { href: `/building/${r.buildingId}`, label: tx.building }]} />
-      <h1>{tx.welcome}, {r.firstName}</h1>
-      <div className="card">
-        <div>{tx.building}: <strong>{b?.name}</strong></div>
-        <div>{tx.apartment}: <strong>{r.apartmentNumber}</strong> · {tx.floorShort} {r.floor}</div>
+    <Shell user={r} menu={residentMenu(r.buildingId, tx)} active="/me" title={`${tx.welcome}, ${r.firstName}`}
+      subtitle={`${b.name} · ${tx.apartment} ${r.apartmentNumber} · ${tx.floorShort} ${r.floor}`}>
+      <div className={`hero ${ok ? "good" : "warn"}`}>
+        {ok ? (<>
+          <div className="big">✓ {tx.upToDate}</div>
+          <p>{d.paidUpTo ? `${tx.paidUntil} ${monthLabel(d.paidUpTo, r.lang)}` : ""}</p>
+        </>) : (<>
+          <div className="big">{tx.youOwe} {d.amountCents >= 0 ? formatMoney(d.amountCents, b.currency) : ""}</div>
+          <p>{d.unpaid.length} {tx.monthsUnpaid}: {d.unpaid.map((m) => monthLabel(m, r.lang)).join(", ")}</p>
+        </>)}
       </div>
-      <h2>{tx.myPayments}</h2>
-      <div className="card">
-        <table>
-          <thead><tr><th>{tx.month}</th><th>{tx.status}</th><th className="num">{tx.amount}</th><th>{tx.receiptNo}</th></tr></thead>
-          <tbody>{months.map((m) => (
-            <tr key={m.month}>
-              <td>{monthLabel(m.month, r.lang)}</td>
-              <td className={m.paid ? "ok" : m.overdue ? "bad" : "muted"}>{m.paid ? `✓ ${tx.paid}` : m.overdue ? tx.overdue : tx.unpaid}</td>
-              <td className="num">{m.amountCents !== null && b ? formatMoney(m.amountCents, b.currency) : ""}</td>
-              <td>{m.receiptNo ?? ""}</td>
-            </tr>))}</tbody>
-        </table>
+      <div className="stats">
+        <div className="stat"><div className="label">💰 {tx.balance} ({tx.building.toLowerCase()})</div>
+          <div className={`value ${sum.balanceCents < 0 ? "bad" : ""}`}>{formatMoney(sum.balanceCents, b.currency)}</div></div>
+        <div className="stat"><div className="label">✅ {tx.paidThisMonth}</div><div className="value">{sum.paidThisMonth} / {sum.apartments}</div></div>
       </div>
-      <p className="muted"><Link href={`/building/${r.buildingId}`}>{tx.building} →</Link></p>
-    </>
+      <div className="actions">
+        <Link className="btn" href="/me/payments">💶 {tx.myPayments}</Link>
+        <Link className="btn light" href={`/building/${r.buildingId}`}>🧾 {tx.buildingExpenses}</Link>
+      </div>
+    </Shell>
   );
 }

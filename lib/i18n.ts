@@ -26,6 +26,16 @@ const sq = {
   openInvoice: "Fatura", expenseSaved: "Shpenzimi u regjistrua.", noAccess: "Nuk keni qasje në këtë ndërtesë.",
   errNoInvoice: "Fatura është e detyrueshme.", errBadInvoice: "Fatura duhet të jetë PDF, JPG, PNG ose WEBP, deri në 10 MB.",
   of: "nga",
+  dashboard: "Paneli", home: "Ballina", apartmentsMenu: "Banesat", residentsMenu: "Banorët", servicesMenu: "Shërbimet & çmimet",
+  paymentsMenu: "Pagesat", expensesMenu: "Shpenzimet", buildingExpenses: "Shpenzimet e ndërtesës", allBuildings: "Të gjitha ndërtesat",
+  paidThisMonth: "Kanë paguar këtë muaj", owing: "Banesa me borxh", quick: "Veprime të shpejta",
+  upToDate: "Jeni në rregull", paidUntil: "Paguar deri në", youOwe: "Keni për të paguar", monthsUnpaid: "muaj pa paguar",
+  owes: "Borxh", allPaid: "Të gjitha banesat kanë paguar.", noPayYet: "Ende asnjë pagesë.",
+  saveAll: "Ruaj të gjitha çmimet", priceHelp: "Shkruani çmimin mujor për çdo kat. 0 = ky kat nuk paguan këtë shërbim.",
+  emptyApartments: "Ende nuk ka banesa. Shtoni të parën më poshtë.", emptyServices: "Ende nuk ka shërbime. Shtoni p.sh. Pastrimi, Ashensori.",
+  emptyResidents: "Ende nuk ka banorë. Ftoni të parin më poshtë.", emptyExpenses: "Ende nuk ka shpenzime.",
+  needApartments: "Shtoni fillimisht banesat.", needServices: "Shtoni fillimisht shërbimet.",
+  step: "Hapi", setupGuide: "Konfiguroni ndërtesën", menu: "Menuja", whereMoneyWent: "Ku shkuan paratë",
 };
 export type Texts = typeof sq;
 
@@ -56,6 +66,16 @@ const en: Texts = {
   openInvoice: "Invoice", expenseSaved: "Expense recorded.", noAccess: "You do not have access to this building.",
   errNoInvoice: "The invoice is required.", errBadInvoice: "The invoice must be a PDF, JPG, PNG or WEBP, up to 10 MB.",
   of: "of",
+  dashboard: "Dashboard", home: "Home", apartmentsMenu: "Apartments", residentsMenu: "Residents", servicesMenu: "Services & prices",
+  paymentsMenu: "Payments", expensesMenu: "Expenses", buildingExpenses: "Building expenses", allBuildings: "All buildings",
+  paidThisMonth: "Paid this month", owing: "Apartments owing", quick: "Quick actions",
+  upToDate: "You are up to date", paidUntil: "Paid until", youOwe: "You owe", monthsUnpaid: "unpaid months",
+  owes: "Owes", allPaid: "All apartments have paid.", noPayYet: "No payments yet.",
+  saveAll: "Save all prices", priceHelp: "Enter the monthly price for each floor. 0 = this floor does not pay for this service.",
+  emptyApartments: "No apartments yet. Add the first one below.", emptyServices: "No services yet. Add e.g. Cleaning, Elevator.",
+  emptyResidents: "No residents yet. Invite the first one below.", emptyExpenses: "No expenses yet.",
+  needApartments: "Add the apartments first.", needServices: "Add the services first.",
+  step: "Step", setupGuide: "Set up the building", menu: "Menu", whereMoneyWent: "Where the money went",
 };
 
 export function t(lang: string | undefined): Texts {
